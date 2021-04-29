@@ -6,7 +6,11 @@ class MPromise {
   constructor(executor) {
     this.status = MPromise.PENDING;
     this.value = null;
-    executor(this.resolve.bind(this), this.reject.bind(this));
+    try {
+      executor(this.resolve.bind(this), this.reject.bind(this));
+    } catch (error) {
+      this.reject(error)
+    }
   }
 
   resolve(value) {
