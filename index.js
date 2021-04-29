@@ -18,8 +18,10 @@ class MPromise {
     if (this.status === MPromise.PENDING) {
       this.status = MPromise.FULFILLED;
       this.value = value;
-      this.callbacks.map(callback => {
-        callback.onFulfilled(value);
+      setTimeout(() => {
+        this.callbacks.map(callback => {
+          callback.onFulfilled(value);
+        }); 
       });
     }
   }
@@ -28,9 +30,11 @@ class MPromise {
     if (this.status === MPromise.PENDING) {
       this.status = MPromise.REJECTED;
       this.value = reason;
-      this.callbacks.map(callback => {
-        callback.onRejected(reason);
-      })
+      setTimeout(() => {
+        this.callbacks.map(callback => {
+          callback.onRejected(reason);
+        }) 
+      });
     }
   }
 
