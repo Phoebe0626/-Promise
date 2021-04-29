@@ -54,7 +54,7 @@ class MPromise {
               let result = onFulfilled(this.value)
               resolve(result);
             } catch (error) {
-              onRejected(error);
+              reject(error);
             }
           },
           onRejected: reason => {
@@ -62,7 +62,7 @@ class MPromise {
               let result = onRejected(this.value)
               resolve(result);
             } catch (error) {
-              onRejected(error);
+              reject(error);
             }
           }
         })
@@ -75,7 +75,7 @@ class MPromise {
             let result = onFulfilled(this.value)
             resolve(result);
           } catch (error) {
-            onRejected(error);
+            reject(error);
           } 
         });
       }
