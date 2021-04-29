@@ -123,4 +123,20 @@ class MPromise {
       })
     })
   }
+
+  static race(promises) {
+    return new MPromise((resolve, reject) => {
+      promises.forEach(promise => {
+        promise.then(
+          value => {
+            resolve(value)
+          },
+          reason => {
+            reject(reason);
+          }
+        )
+      })
+    })
+  }
+
 }
