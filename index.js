@@ -45,8 +45,20 @@ class MPromise {
       // 待定状态
       if (this.status === MPromise.PENDING) {
         this.callbacks.push({
-          onFulfilled,
-          onRejected
+          onFulfilled: value => {
+            try {
+              onFulfilled(value);
+            } catch (error) {
+              onRejected(error);
+            }
+          },
+          onRejected: reason => {
+            try {
+              onRejected(reason);
+            } catch (error) {
+              onRejected(error);
+            }
+          }
         })
       }
       
