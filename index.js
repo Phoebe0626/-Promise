@@ -73,7 +73,7 @@ class MPromise {
     });
     return promise;
   }
-
+  // 公共代码
   parse(promise, result, resolve, reject) {
     if (result === promise) { // 不允许返回自身的 Promise
       throw new TypeError('Chaining cycle detected');
@@ -87,5 +87,21 @@ class MPromise {
     } catch (error) {
       reject(error);
     }
+  }
+
+  static resolve(value) {
+    return new MPromise((resolve, reject) => {
+      if (value instanceof MPromise) {
+        value.then(resolve, reject);
+      } else {
+        resolve(value)
+      }
+    })
+  }
+  
+  static reject(reason) {
+    return new MPromise((resolve, reject) => {
+      reject(reason);
+    })
   }
 }

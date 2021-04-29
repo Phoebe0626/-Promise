@@ -10,12 +10,14 @@
   <script>
     let promise = new Promise((resolve, reject) => {
         resolve('解决')
-        return p2
     });
 
-    let p = promise.then(
+    Promise.reject(promise).then(
       value => {
-        return p;
+        console.log(value);
+      },
+      reason => {
+        console.log(reason);
       }
     )
 
