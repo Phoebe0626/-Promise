@@ -45,22 +45,30 @@ class MPromise {
     if (typeof onRejected !== 'function') {
       onRejected = () => this.value;
     }
-    return new MPromise((resolve, reject) => {
+    let promise = new MPromise((resolve, reject) => {
       // 待定状态
       if (this.status === MPromise.PENDING) {
         this.callbacks.push({
           onFulfilled: value => {
             try {
               let result = onFulfilled(this.value)
-              resolve(result);
+              if (result instanceof MPromise) {
+                result.then(resolve, reject);
+              } else {
+                resolve(result);
+              }
             } catch (error) {
               reject(error);
             }
           },
           onRejected: reason => {
             try {
-              let result = onRejected(this.value)
-              resolve(result);
+              let result = onRejected(this.value);
+              if (result instanceof MPromise) {
+                result.then(resolve, reject);
+              } else {
+                resolve(result);
+              }
             } catch (error) {
               reject(error);
             }
@@ -73,10 +81,14 @@ class MPromise {
         setTimeout(() => {
           try {
             let result = onFulfilled(this.value)
-            resolve(result);
+            if (result instanceof MPromise) {
+              result.then(resolve, reject);
+            } else {
+              resolve(result);
+            }
           } catch (error) {
             reject(error);
-          } 
+          }
         });
       }
       
@@ -85,12 +97,17 @@ class MPromise {
         setTimeout(() => {
           try {
             let result = onRejected(this.value)
-            resolve(result);
+            if (result instanceof MPromise) {
+              result.then(resolve, reject);
+            } else {
+              resolve(result);
+            }
           } catch (error) {
-            onRejected(error);
-          } 
+            reject(error);
+          }
         });
       }
-    })
+    });
+    return promise;
   }
 }
