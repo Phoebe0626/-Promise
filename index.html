@@ -9,26 +9,14 @@
 </head>
 <body>
   <script>
-    // let p1 = new MPromise((resolve, reject) => {
-    //   resolve('p1');
-    // })
-    let p = new MPromise((resolve, reject) => {
-      resolve('解决');
+    let promise = new MPromise((resolve, reject) => {
+        resolve('解决')
+        return p2
     });
 
-    p.then(
+    let p = promise.then(
       value => {
-        console.log(value);
-        return new MPromise((resolve, reject) => {
-          resolve('1');
-        })
-      },
-      reason => {
-        console.log(reason);
-      }
-    ).then(
-      value => {
-        console.log(value);
+        return p;
       }
     )
 

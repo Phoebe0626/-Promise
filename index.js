@@ -50,28 +50,10 @@ class MPromise {
       if (this.status === MPromise.PENDING) {
         this.callbacks.push({
           onFulfilled: value => {
-            try {
-              let result = onFulfilled(this.value)
-              if (result instanceof MPromise) {
-                result.then(resolve, reject);
-              } else {
-                resolve(result);
-              }
-            } catch (error) {
-              reject(error);
-            }
+            this.parse(promise, onFulfilled(this.value), resolve, reject);
           },
           onRejected: reason => {
-            try {
-              let result = onRejected(this.value);
-              if (result instanceof MPromise) {
-                result.then(resolve, reject);
-              } else {
-                resolve(result);
-              }
-            } catch (error) {
-              reject(error);
-            }
+            this.parse(promise, onRejected(this.value), resolve, reject);
           }
         })
       }
@@ -79,35 +61,31 @@ class MPromise {
       // 成功状态
       if (this.status === MPromise.FULFILLED) {
         setTimeout(() => {
-          try {
-            let result = onFulfilled(this.value)
-            if (result instanceof MPromise) {
-              result.then(resolve, reject);
-            } else {
-              resolve(result);
-            }
-          } catch (error) {
-            reject(error);
-          }
-        });
+          this.parse(promise, onFulfilled(this.value), resolve, reject);
+        })
       }
-      
       // 失败状态
       if (this.status === MPromise.REJECTED) {
         setTimeout(() => {
-          try {
-            let result = onRejected(this.value)
-            if (result instanceof MPromise) {
-              result.then(resolve, reject);
-            } else {
-              resolve(result);
-            }
-          } catch (error) {
-            reject(error);
-          }
+          this.parse(promise, onRejected(this.value), resolve, reject);
         });
       }
     });
     return promise;
+  }
+
+  parse(promise, result, resolve, reject) {
+    if (result === promise) { // 不允许返回自身的 Promise
+      throw new TypeError('Chaining cycle detected');
+    }
+    try {
+      if (result instanceof MPromise) {
+        result.then(resolve, reject);
+      } else {
+        resolve(result);
+      }
+    } catch (error) {
+      reject(error);
+    }
   }
 }
