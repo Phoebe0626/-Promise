@@ -104,4 +104,23 @@ class MPromise {
       reject(reason);
     })
   }
+
+  static all(promises) {
+    return new MPromise((resolve, reject) => {
+      const values = [];
+      promises.forEach(promise => {
+        promise.then(
+          value => {
+            values.push(value);
+            if (values.length === promises.length) {
+              resolve(values)
+            }
+          },
+          reason => {
+            reject(reason);
+          }
+        )
+      })
+    })
+  }
 }

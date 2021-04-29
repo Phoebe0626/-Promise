@@ -10,11 +10,14 @@
 <body>
   <script>
 
-    let promise = new MPromise((resolve, reject) => {
+    let p1 = new MPromise((resolve, reject) => {
         resolve('解决')
     });
+    let p2 = new MPromise((resolve, reject) => {
+        resolve('2')
+    });
 
-    MPromise.reject(promise).then(
+    MPromise.all([p1, p2]).then(
       value => {
         console.log(value);
       },
