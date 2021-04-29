@@ -14,9 +14,9 @@
     // })
     let p = new MPromise((resolve, reject) => {
       setTimeout(() => {
-        resolve('解决')
+        // resolve('解决')
+        reject('拒绝');
       }, 1000);
-      // reject('拒绝');
       // resolve('解决');
     });
 

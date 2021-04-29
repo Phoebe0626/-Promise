@@ -6,6 +6,7 @@ class MPromise {
   constructor(executor) {
     this.status = MPromise.PENDING;
     this.value = null;
+    this.callbacks = [];
     try {
       executor(this.resolve.bind(this), this.reject.bind(this));
     } catch (error) { // 发生错误 状态改为 rejected
@@ -17,6 +18,9 @@ class MPromise {
     if (this.status === MPromise.PENDING) {
       this.status = MPromise.FULFILLED;
       this.value = value;
+      this.callbacks.map(callback => {
+        callback.onFulfilled(value);
+      });
     }
   }
 
@@ -24,6 +28,9 @@ class MPromise {
     if (this.status === MPromise.PENDING) {
       this.status = MPromise.REJECTED;
       this.value = reason;
+      this.callbacks.map(callback => {
+        callback.onRejected(reason);
+      })
     }
   }
 
@@ -37,6 +44,10 @@ class MPromise {
     return new MPromise((resolve, reject) => {
       // 待定状态
       if (this.status === MPromise.PENDING) {
+        this.callbacks.push({
+          onFulfilled,
+          onRejected
+        })
       }
       
       // 成功状态
@@ -45,7 +56,7 @@ class MPromise {
           try {
             resolve(onFulfilled(this.value));
           } catch (error) {
-            onRejected(error)
+            onRejected(error);
           } 
         });
       }
