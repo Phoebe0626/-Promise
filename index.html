@@ -14,13 +14,28 @@
     // })
     let p = new MPromise((resolve, reject) => {
       // reject('拒绝');
-      console.log(a);
-      resolve('解决')
+      resolve('解决');
     });
 
-    console.log(p);
-
+    p
+    .then(
+      value => {
+        return a
+      },
+      reason => {
+        return a
+      }
+    )
+    .then(
+      value => {
+        console.log(value);
+      },
+      reason => {
+        console.log(reason);
+      }
+    )
     console.log(1);
+
   </script>
 </body>
 </html>

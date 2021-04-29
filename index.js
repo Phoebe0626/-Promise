@@ -8,7 +8,7 @@ class MPromise {
     this.value = null;
     try {
       executor(this.resolve.bind(this), this.reject.bind(this));
-    } catch (error) {
+    } catch (error) { // 发生错误 状态改为 rejected
       this.reject(error)
     }
   }
@@ -19,10 +19,35 @@ class MPromise {
       this.value = value;
     }
   }
+
   reject(reason) {
     if (this.status === MPromise.PENDING) {
       this.status = MPromise.REJECTED;
       this.value = reason;
     }
+  }
+
+  then(onFulfilled, onRejected) {
+    if (typeof onFulfilled !== 'function') { // then 的穿透
+      onFulfilled = () => this.value;
+    }
+    if (typeof onRejected !== 'function') {
+      onRejected = () => this.value;
+    }
+    return new MPromise((resolve, reject) => {
+      // 待定状态
+      if (this.status === MPromise.PENDING) {
+      }
+      
+      // 成功状态
+      if (this.status === MPromise.FULFILLED) {
+        resolve(onFulfilled(this.value));
+      }
+      
+      // 失败状态
+      if (this.status === MPromise.REJECTED) {
+        reject(onRejected(this.value))
+      }
+    })
   }
 }
