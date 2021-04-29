@@ -51,14 +51,16 @@ class MPromise {
         this.callbacks.push({
           onFulfilled: value => {
             try {
-              onFulfilled(value);
+              let result = onFulfilled(this.value)
+              resolve(result);
             } catch (error) {
               onRejected(error);
             }
           },
           onRejected: reason => {
             try {
-              onRejected(reason);
+              let result = onRejected(this.value)
+              resolve(result);
             } catch (error) {
               onRejected(error);
             }
@@ -70,7 +72,8 @@ class MPromise {
       if (this.status === MPromise.FULFILLED) {
         setTimeout(() => {
           try {
-            resolve(onFulfilled(this.value));
+            let result = onFulfilled(this.value)
+            resolve(result);
           } catch (error) {
             onRejected(error);
           } 
@@ -81,7 +84,8 @@ class MPromise {
       if (this.status === MPromise.REJECTED) {
         setTimeout(() => {
           try {
-            reject(onRejected(this.value));
+            let result = onRejected(this.value)
+            resolve(result);
           } catch (error) {
             onRejected(error);
           } 

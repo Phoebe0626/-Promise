@@ -14,9 +14,8 @@
     // })
     let p = new MPromise((resolve, reject) => {
       setTimeout(() => {
-        resolve('解决')
-        console.log('123');
-        // reject('拒绝');
+        // resolve('解决')
+        reject('拒绝');
       }, 1000);
       // resolve('解决');
     });
@@ -24,11 +23,15 @@
     p.then(
       value => {
         console.log(value);
+        return 'nihao';
       },
       reason => {
         console.log(reason);
+        return 'hah'
       }
-    )
+    ).then(value => {
+      console.log(value)
+    })
     console.log('hello');
 
   </script>
