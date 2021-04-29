@@ -13,7 +13,9 @@
     })
     let p = new Promise((resolve, reject) => {
       // reject('拒绝')
-      resolve('解决')
+      setTimeout(() => {
+        resolve('解决')
+      }, 1000);
     });
 
     p

@@ -41,12 +41,24 @@ class MPromise {
       
       // 成功状态
       if (this.status === MPromise.FULFILLED) {
-        resolve(onFulfilled(this.value));
+        setTimeout(() => {
+          try {
+            resolve(onFulfilled(this.value));
+          } catch (error) {
+            onRejected(error)
+          } 
+        });
       }
       
       // 失败状态
       if (this.status === MPromise.REJECTED) {
-        reject(onRejected(this.value))
+        setTimeout(() => {
+          try {
+            reject(onRejected(this.value));
+          } catch (error) {
+            onRejected(error);
+          } 
+        });
       }
     })
   }
